@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "types": ["node"]   // <--- важно для Node.js
   },
   "include": ["src"]
 }

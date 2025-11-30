@@ -15,6 +15,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/multer": "^2.0.0",
+    "@types/node": "^24.10.1",
     "concurrently": "^8.0.0",
     "pnpm": "^8.0.0"
   }
