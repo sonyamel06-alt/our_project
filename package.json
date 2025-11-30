@@ -1,0 +1,16 @@
+{
+  "name": "mini-advent",
+  "private": true,
+  "workspaces": ["services/*"],
+  "scripts": {
+    "dev:api": "pnpm --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev": "concurrently \"pnpm dev:api\" \"pnpm dev:web\"",
+    "build": "pnpm -r run build",
+    "start": "pnpm --filter api start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "pnpm": "^8.0.0"
+  }
+}

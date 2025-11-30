@@ -1,0 +1,76 @@
+:root{
+  --bg: #f7f3f7;
+  --card: #fff;
+  --accent: #b7d8c6; /* mint pastel */
+  --accent-2: #f6d6e0; /* pink pastel */
+  --text: #2b2b2b;
+  --muted: #6b6b6b;
+}
+
+/* reset */
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,var(--bg),#ffffff);color:var(--text);}
+
+.app-root{max-width:920px;margin:40px auto;padding:20px;}
+.header{text-align:center;margin-bottom:20px;}
+.header h1{margin:0;font-size:28px}
+.subtitle{color:var(--muted);margin-top:6px}
+
+/* grid */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap:14px;
+  margin-top:24px;
+}
+.cell{
+  background:var(--card);
+  border-radius:12px;
+  height:92px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  box-shadow: 0 6px 18px rgba(21,21,21,0.06);
+  transition:transform .15s ease, box-shadow .15s ease;
+  border: 1px solid rgba(0,0,0,0.03);
+}
+.cell:hover{transform:translateY(-6px);box-shadow: 0 14px 30px rgba(21,21,21,0.09)}
+.cell-number{font-weight:700;color:var(--muted)}
+.cell.filled{background:linear-gradient(180deg,var(--accent-2),var(--accent)); color:#fff}
+.cell.filled .cell-number{color:#fff}
+
+.dot{
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  width:10px;
+  height:10px;
+  background:rgba(255,255,255,0.8);
+  border-radius:50%;
+}
+
+/* modal */
+.modal-backdrop{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,10,10,0.35);z-index:50;
+}
+.modal{
+  width:min(720px, 92%);
+  max-height:86vh;
+  overflow:auto;
+  background:var(--card);
+  border-radius:16px;
+  padding:18px;
+  position:relative;
+  box-shadow:0 30px 80px rgba(15,15,15,0.2);
+}
+.modal-image{width:100%;border-radius:10px;object-fit:cover;max-height:360px}
+.modal-close{position:absolute;top:12px;right:12px;border:none;background:transparent;font-size:18px;cursor:pointer}
+.modal-content{padding:12px 4px}
+.modal-content h3{margin:0 0 6px 0}
+.modal-content p{color:var(--muted);margin:0}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:12px 18px;border-radius:999px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,0.12)
+}
