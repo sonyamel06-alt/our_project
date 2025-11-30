@@ -1,4 +1,4 @@
-import { Router, Request } from "express";
+import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import multer from "multer";
 import path from "path";
@@ -14,28 +14,20 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${safe}`);
   }
 });
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } }); // 5Mb
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 
 export default function memoriesRouter(prisma: PrismaClient) {
   const r = Router();
 
-  // GET calendar: returns days 1..N + hasMemory flag
-  r.get("/calendar", async (_req, res) => {
-    const DAYS = 25; // измени при необходимости
-    const memories = await prisma.memory.findMany({
-      where: { visible: true },
-      select: { day: true }
-    });
+  r.get("/calendar", async (_req: Request, res: Response) => {
+    const DAYS = 25;
+    const memories = await prisma.memory.findMany({ where: { visible: true }, select: { day: true } });
     const set = new Set(memories.map(m => m.day));
-    const result = Array.from({ length: DAYS }).map((_, i) => ({
-      day: i + 1,
-      hasMemory: set.has(i + 1)
-    }));
+    const result = Array.from({ length: DAYS }).map((_, i) => ({ day: i + 1, hasMemory: set.has(i + 1) }));
     res.json(result);
   });
 
-  // GET memory by day
-  r.get("/:day", async (req, res) => {
+  r.get("/:day", async (req: Request, res: Response) => {
     const day = Number(req.params.day);
     if (!day || day < 1) return res.status(400).json({ error: "Invalid day" });
 
@@ -47,12 +39,11 @@ export default function memoriesRouter(prisma: PrismaClient) {
       day: mem.day,
       title: mem.title,
       text: mem.text,
-      imagePath: mem.imagePath // относительный, фронт добавит префикс
+      imagePath: mem.imagePath
     });
   });
 
-  // Admin: create/update (multipart: image + fields)
-  r.post("/", upload.single("image"), async (req: Request, res) => {
+  r.post("/", upload.single("image"), async (req: Request, res: Response) => {
     try {
       const { day, title, text } = req.body;
       const dayNum = Number(day);
@@ -63,23 +54,12 @@ export default function memoriesRouter(prisma: PrismaClient) {
       if (existing) {
         const updated = await prisma.memory.update({
           where: { id: existing.id },
-          data: {
-            title,
-            text,
-            imagePath: filename ?? existing.imagePath,
-            visible: true
-          }
+          data: { title, text, imagePath: filename ?? existing.imagePath, visible: true }
         });
         return res.json(updated);
       } else {
         const created = await prisma.memory.create({
-          data: {
-            day: dayNum,
-            title,
-            text,
-            imagePath: filename,
-            visible: true
-          }
+          data: { day: dayNum, title, text, imagePath: filename, visible: true }
         });
         return res.json(created);
       }

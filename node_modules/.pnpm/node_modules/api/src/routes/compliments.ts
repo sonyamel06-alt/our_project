@@ -1,9 +1,9 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 
 export default function complimentsRouter(prisma: PrismaClient) {
   const r = Router();
-  r.get("/", async (_req, res) => {
+  r.get("/", async (_req: Request, res: Response) => {
     const all = await prisma.compliment.findMany();
     if (all.length === 0) return res.json({ text: "Ты прекрасна" });
     const idx = Math.floor(Math.random() * all.length);
